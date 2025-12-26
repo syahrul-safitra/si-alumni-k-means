@@ -52,7 +52,7 @@ class AlumniController extends Controller
             'nis' => 'required|string|max:20|unique:alumnis,nis',
             'nama_lengkap' => 'required|string|max:100',
             'tanggal_lahir' => 'required|date',
-            'jenis_kelamin' => 'required|in:laki_laki, perempuan',
+            'jenis_kelamin' => 'required|in:laki_laki,perempuan',
             'alamat' => 'required|max:240',
             'no_telepon' => 'required|string|max:20',
             'email' => 'required|email',
@@ -90,7 +90,7 @@ class AlumniController extends Controller
             // Jika semua proses di atas berhasil, simpan permanen ke database
             DB::commit();
 
-            return redirect()->back()->with('success', 'Data alumni berhasil disimpan!');
+            return redirect('alumni')->with('success', 'Data alumni berhasil disimpan!');
 
         } catch (Exception $e) {
             // Jika ada error sekecil apapun, batalkan semua perubahan di database
@@ -218,93 +218,114 @@ class AlumniController extends Controller
         return back()->with('success', 'Berhasil menghapus data alumni ' .  $getName);
     }
 
-    public function clustering() {
-            $dataAlumni = NumberDataAlumni::all()->toArray();
+    // Perhitungan Cluster Baru
 
-            $dataPoints = array_map(function($item) {
-                return [
-                    $item['value_jenis_pekerjaan'],
-                    $item['value_jenjang_pendidikan'],
-                    $item['value_tahun_lulus'],
-                    $item['value_domisili'],
-                    $item['value_jenis_keahlian']
-                ];
-            }, $dataAlumni);
+    // public function clustering() {
+    //         $dataAlumni = NumberDataAlumni::all()->toArray();
 
-            $k = 3;
-            $maxIterations = 100;
+    //         $dataPoints = array_map(function($item) {
+    //             return [
+    //                 $item['value_jenis_pekerjaan'],
+    //                 $item['value_jenjang_pendidikan'],
+    //                 $item['value_tahun_lulus'],
+    //                 $item['value_domisili'],
+    //                 $item['value_jenis_keahlian']
+    //             ];
+    //         }, $dataAlumni);
 
-            // Centroid tetap untuk hasil stabil
-            $centroids = [
-                [3,1,0.5,0.6,4],  // C1: Alumni lokal & berwirausaha
-                [2,3,0.4,1,3],    // C2: Alumni profesional
-                [1,2,0.3,0.5,2]   // C3: Alumni mahasiswa / lulusan baru
-            ];
+    //         $k = 3;
+    //         $maxIterations = 100;
 
-            $clusters = [];
-            for ($i = 0; $i < $maxIterations; $i++) {
-                $clusters = array_fill(0, $k, []);
+    //         // Centroid tetap untuk hasil stabil
+    //         $centroids = [
+    //             [3,1,0.5,0.6,4],  // C1: Alumni lokal & berwirausaha
+    //             [2,3,0.4,1,3],    // C2: Alumni profesional
+    //             [1,2,0.3,0.5,2]   // C3: Alumni mahasiswa / lulusan baru
+    //         ];
 
-                foreach ($dataPoints as $index => $point) {
-                    $distances = array_map(fn($c) => $this->euclideanDistance($point, $c), $centroids);
-                    $clusterIndex = array_search(min($distances), $distances);
-                    $clusters[$clusterIndex][] = $index;
-                }
+    //         $clusters = [];
+    //         for ($i = 0; $i < $maxIterations; $i++) {
+    //             $clusters = array_fill(0, $k, []);
 
-                $newCentroids = [];
-                foreach ($clusters as $cluster) {
-                    $clusterPoints = array_map(fn($idx) => $dataPoints[$idx], $cluster);
-                    $newCentroids[] = $this->calculateMean($clusterPoints);
-                }
+    //             foreach ($dataPoints as $index => $point) {
+    //                 $distances = array_map(fn($c) => $this->euclideanDistance($point, $c), $centroids);
+    //                 $clusterIndex = array_search(min($distances), $distances);
+    //                 $clusters[$clusterIndex][] = $index;
+    //             }
 
-                if ($newCentroids === $centroids) break;
-                $centroids = $newCentroids;
-            }
+    //             $newCentroids = [];
+    //             foreach ($clusters as $cluster) {
+    //                 $clusterPoints = array_map(fn($idx) => $dataPoints[$idx], $cluster);
+    //                 $newCentroids[] = $this->calculateMean($clusterPoints);
+    //             }
 
-            // Label cluster tetap
-            $clusterLabels = [
-                'Alumni lokal & berwirausaha',
-                'Alumni profesional',
-                'Alumni mahasiswa / lulusan baru'
-            ];
+    //             if ($newCentroids === $centroids) break;
+    //             $centroids = $newCentroids;
+    //         }
 
-            $clusterCounts = array_map(fn($c) => count($c), $clusters);
-            $total = array_sum($clusterCounts);
+    //         // Label cluster tetap
+    //         $clusterLabels = [
+    //             'Alumni lokal & berwirausaha',
+    //             'Alumni profesional',
+    //             'Alumni mahasiswa / lulusan baru'
+    //         ];
 
-            // Persentase tiap cluster
-            $clusterPercent = array_map(fn($c) => round($c/$total*100,1), $clusterCounts);
+    //         $clusterCounts = array_map(fn($c) => count($c), $clusters);
+    //         $total = array_sum($clusterCounts);
 
-            return $centroids;
+    //         // Persentase tiap cluster
+    //         $clusterPercent = array_map(fn($c) => round($c/$total*100,1), $clusterCounts);
 
-            // Kirim data untuk chart
-            return view('Admin.Alumni.chart', compact('clusterLabels','clusterCounts','clusterPercent'));
-        }
-        private function euclideanDistance($a, $b)
+    //         // Kirim data untuk chart
+    //         return view('Admin.Alumni.chart', compact('clusterLabels','clusterCounts','clusterPercent'));
+    //     }
+        
+        private function mapJenisPekerjaan($value)
         {
-            $sum = 0;
-            foreach ($a as $i => $val) {
-                $sum += pow($val - $b[$i], 2);
-            }
-            return sqrt($sum);
+            return match ($value) {
+                'mahasiswa' => 1,
+                'pns' => 2,
+                'wiraswasta' => 3,
+                'lain_lain' => 4,
+            };
         }
 
-        private function calculateMean($points)
+        private function mapJenjangPendidikan($value)
         {
-            $count = count($points);
-            $dim = count($points[0]);
-            $mean = array_fill(0, $dim, 0);
+            return match ($value) {
+                'SMA' => 1,
+                'D3' => 2,
+                'S1' => 3,
+                'S2' => 4,
+                'S3' => 5,
+            };
+        }
 
-            foreach ($points as $p) {
-                foreach ($p as $i => $val) {
-                    $mean[$i] += $val;
-                }
-            }
+        function mapJenisKeahlian($keahlian)
+        {
+            return match (strtolower($keahlian)) {
+                'teknologi'   => 1,
+                'pendidikan'  => 2,
+                'kesehatan'   => 3,
+                'pertanian'   => 4,
+                default       => 5, // lain_lain        
+            };
+        }
 
-            foreach ($mean as $i => $val) {
-                $mean[$i] /= $count;
-            }
 
-            return $mean;
+
+        private function mapDomisili($value)
+        {
+            // Alumni lokal (Jambi)
+            return strtolower($value) === 'jambi' ? 1 : 0;
+        }
+
+        private function normalizeTahunLulus($tahun)
+        {
+            $min = 2021;
+            $max = date('Y');
+
+            return ($tahun - $min) / ($max - $min);
         }
 
         // ================================== KODINGAN LAMA ============================================================
@@ -463,54 +484,6 @@ class AlumniController extends Controller
     // }
 
     // // ======================================================================
-
-    // private function mapJenisPekerjaan($value)
-    // {
-    //     return match ($value) {
-    //         'mahasiswa' => 1,
-    //         'pns' => 2,
-    //         'wiraswasta' => 3,
-    //         'lain_lain' => 4,
-    //     };
-    // }
-
-    // private function mapJenjangPendidikan($value)
-    // {
-    //     return match ($value) {
-    //         'SMA' => 1,
-    //         'D3' => 2,
-    //         'S1' => 3,
-    //         'S2' => 4,
-    //         'S3' => 5,
-    //     };
-    // }
-
-    // function mapJenisKeahlian($keahlian)
-    // {
-    //     return match (strtolower($keahlian)) {
-    //         'teknologi'   => 1,
-    //         'pendidikan'  => 2,
-    //         'kesehatan'   => 3,
-    //         'pertanian'   => 4,
-    //         default       => 5, // lain_lain        
-    //     };
-    // }
-
-
-
-    // private function mapDomisili($value)
-    // {
-    //     // Alumni lokal (Jambi)
-    //     return strtolower($value) === 'jambi' ? 1 : 0;
-    // }
-
-    // private function normalizeTahunLulus($tahun)
-    // {
-    //     $min = 2021;
-    //     $max = date('Y');
-
-    //     return ($tahun - $min) / ($max - $min);
-    // }
 
     // // Fungsi Untuk K-Means : 
     // // ================== FUNGSI BANTU ==================

@@ -18,8 +18,18 @@
                 </div>
             @endsession
 
-            <a href="{{ url('alumni/create') }}" class="btn btn-primary mb-3">Tambah</a>
+            <div class="d-flex ">
+
+                <a href="{{ url('alumni/create') }}" class="btn btn-primary mb-3" style="margin-right: 10px">Tambah</a>
+
+                @if (count($alumnis) > 0)
+                    <a href="{{ url('cluster') }}" class="btn btn-success mb-3">Cluster</a>
+                @endif
+
+            </div>
+
             <div class="table-responsive">
+
                 <table class="table-bordered table" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
