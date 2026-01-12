@@ -37,10 +37,18 @@ class ClusteringController extends Controller
         $maxIterations = 100;
 
         // Centroid tetap untuk hasil stabil
+
+        // 1. Melanjutkan pendidikan : yang masih kuliah.
+
+        // 2. Aktif Kerja : 
+        // - Sarjana, berwirausaha, Lain-Lain
+
+        // 3. IRT
+        // - Tidak bekerja
         $centroids = [
-            [3,1,0.5,0.6,4],  
-            [2,3,0.4,1,3],    
-            [1,2,0.3,0.5,2]   
+            [1,3,0.5,0.6,2],  
+            [3,3,0.4,1,1],    
+            [4,3,0.3,0.5,5]   
         ];
 
         $clusters = [];
@@ -77,9 +85,9 @@ class ClusteringController extends Controller
         }
 
         $clusterLabels = [
-            'Alumni lokal & berwirausaha',
-            'Alumni profesional',
-            'Alumni mahasiswa / lulusan baru'
+            'Alumni Melanjutkan Pendidikan',
+            'Alumni Aktif Kerja',
+            'Alumni IRT'
         ];
 
         // --- Simpan centroid ke DB ---
@@ -99,7 +107,7 @@ class ClusteringController extends Controller
                 $alumni = NumberDataAlumni::find($dataAlumni[$alumniIdx]['id']);
 
                 AlumniCluster::create([
-                    'nis_alumni' => $alumni->nis_alumni,
+                    'alumni_id' => $alumni->id,
                     'cluster_id' => $idx,
                     'cluster_label' => $clusterLabels[$idx]
                 ]);
@@ -171,8 +179,8 @@ class ClusteringController extends Controller
         }
 
         // --- Ambil data alumni per cluster ---
-        $alumniData = AlumniCluster::join('alumnis', 'alumni_clusters.nis_alumni', '=', 'alumnis.nis')
-            ->select('alumnis.nis', 'alumnis.nama_lengkap','alumnis.tahun_lulus', 'alumni_clusters.cluster_id', 'alumni_clusters.cluster_label')
+        $alumniData = AlumniCluster::join('alumnis', 'alumni_clusters.alumni_id', '=', 'alumnis.id')
+            ->select('alumnis.nama_angkatan', 'alumnis.nama_lengkap','alumnis.tahun_lulus', 'alumni_clusters.cluster_id', 'alumni_clusters.cluster_label')
             ->orderBy('alumni_clusters.cluster_id')
             ->get();
 
@@ -212,8 +220,8 @@ class ClusteringController extends Controller
             $alumniCounts[$c->cluster_id] = AlumniCluster::where('cluster_id', $c->cluster_id)->count();
         }
 
-        $alumniData = AlumniCluster::join('alumnis', 'alumni_clusters.nis_alumni', '=', 'alumnis.nis')
-            ->select('alumnis.nis', 'alumnis.nama_lengkap', 'alumnis.tahun_lulus',  'alumni_clusters.cluster_id', 'alumni_clusters.cluster_label')
+        $alumniData = AlumniCluster::join('alumnis', 'alumni_clusters.alumni_id', '=', 'alumnis.id')
+            ->select('alumnis.id', 'alumnis.nama_angkatan', 'alumnis.nama_lengkap', 'alumnis.tahun_lulus',  'alumni_clusters.cluster_id', 'alumni_clusters.cluster_label')
             ->orderBy('alumni_clusters.cluster_id')
             ->get();
 

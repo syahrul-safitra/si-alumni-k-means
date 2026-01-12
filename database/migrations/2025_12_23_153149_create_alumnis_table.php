@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('alumnis', function (Blueprint $table) {
             $table->id();
 
-            $table->string('nis', 20)->unique();
+            // $table->string('nis', 20)->unique();
             $table->string('nama_lengkap');
+            $table->string('nama_angkatan');
             $table->date('tanggal_lahir');
             $table->string('jenis_kelamin', 20);
             $table->string('alamat');
@@ -24,10 +25,11 @@ return new class extends Migration
             $table->string('password');
             $table->string("nama_pekerjaan")->nullable();
             $table->string('nama_tempat_bekerja')->nullable();
+            $table->string("universitas")->nullable();
             $table->string("gambar")->nullable();
 
             // Data untuk k-means
-            $table->enum('jenis_pekerjaan', ['mahasiswa', 'pns', 'wiraswasta', 'lain_lain']);
+            $table->enum('jenis_pekerjaan', ['mahasiswa', 'pns', 'wiraswasta', 'irt', 'lain_lain']);
             $table->enum('jenjang_pendidikan', ['SMA', 'D3', 'S1', 'S2', 'S3']);
             $table->year('tahun_lulus');
             $table->string('domisili');

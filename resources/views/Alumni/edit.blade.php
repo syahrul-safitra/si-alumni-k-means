@@ -35,18 +35,19 @@
                 @csrf
                 @method('PUT')
                 <div class="row g-3">
-                    <!-- NIS -->
-                    <div class="col-md-4 mb-2">
-                        <label for="nis" class="form-label">NIS Alumni</label>
-                        <input type="text" name="nis" id="nis" class="form-control"
-                            value="{{ @old('nis', $alumni->nis) }}" required>
-                    </div>
 
                     <!-- Nama -->
                     <div class="col-md-8 mb-2">
                         <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                         <input type="text" name="nama_lengkap" value="{{ @old('nama_lengkap', $alumni->nama_lengkap) }}"
                             id="nama_lengkap" class="form-control" required>
+                    </div>
+
+                    <!-- Nama Angkatan -->
+                    <div class="col-md-4 mb-2">
+                        <label class="form-label">Nama Angkatan</label>
+                        <input type="text" class="form-control"
+                            value="{{ @old('nama_angkatan', $alumni->nama_angkatan) }}" name="nama_angkatan">
                     </div>
 
                     <!-- Tanggal Lahir -->
@@ -115,6 +116,7 @@
                             <option value="pns" @selected(@old('jenis_pekerjaan', $alumni->jenis_pekerjaan) == 'pns')>PNS</option>
                             <option value="wiraswasta" @selected(@old('jenis_pekerjaan', $alumni->jenis_pekerjaan) == 'wiraswasta')>Wiraswasta</option>
                             <option value="mahasiswa" @selected(@old('jenis_pekerjaan', $alumni->jenis_pekerjaan) == 'mahasiswa')>Mahasiswa</option>
+                            <option value="irt" @selected(@old('jenis_pekerjaan', $alumni->jenis_pekerjaan) == 'irt')>IRT</option>
                             <option value="lain_lain" @selected(@old('jenis_pekerjaan', $alumni->jenis_pekerjaan) == 'lain_lain')>Lain-lain</option>
                         </select>
                     </div>
@@ -142,7 +144,7 @@
                     </div>
 
                     <!-- Domisili -->
-                    <div class="col-md-6 mb-2">
+                    <div class="col-md-4 mb-2">
                         <label for="domisili" class="form-label">Domisili</label>
                         <select name="domisili" id="domisili" class="custom-select form-control" required>
                             <option>-- Pilih Provinsi --</option>
@@ -153,17 +155,28 @@
                         </select>
                     </div>
 
+                    <div class="col-md-4 mb-2">
+                        <label for="universitas" class="form-label">Universitas</label>
+                        <input type="text" name="universitas" id="universitas"
+                            value="{{ @old('universitas', $alumni->universitas) }}" class="form-control">
+                    </div>
+
                     <!-- Jenis Keahlian -->
-                    <div class="col-md-6 mb-2">
-                        <label for="jenis_keahlian" class="form-label">Jenis Keahlian</label>
-                        <select name="jenis_keahlian" id="jenis_keahlian" class="custom-select form-control" required>
-                            <option>-- Pilih --</option>
-                            <option value="teknologi" @selected(@old('jenis_keahlian', $alumni->jenis_keahlian) == 'teknologi')>Teknologi</option>
-                            <option value="pendidikan" @selected(@old('jenis_keahlian', $alumni->jenis_keahlian) == 'pendidikan')>Pendidikan</option>
-                            <option value="kesehatan" @selected(@old('jenis_keahlian', $alumni->jenis_keahlian) == 'kesehatan')>Kesehatan</option>
-                            <option value="pertanian" @selected(@old('jenis_keahlian', $alumni->jenis_keahlian) == 'pertanian')>Pertanian</option>
-                            <option value="lain_lain" @selected(@old('jenis_keahlian', $alumni->jenis_keahlian) == 'lain_lain')>Lain-lain</option>
+                    <!-- Jenis Keahlian -->
+                    <div class="col-md-4">
+                        <label class="form-label">Jenis Keahlian</label>
+                        <select name="jenis_keahlian" class="custom-select @error('jenis_keahlian') is-invalid @enderror">
+                            <option value="">-- Pilih --</option>
+                            @foreach (['teknologi', 'pendidikan', 'kesehatan', 'pertanian', 'lain_lain'] as $item)
+                                <option value="{{ $item }}"
+                                    {{ old('jenis_keahlian', $alumni->jenis_keahlian) == $item ? 'selected' : '' }}>
+                                    {{ ucfirst(str_replace('_', ' ', $item)) }}
+                                </option>
+                            @endforeach
                         </select>
+                        @error('jenis_keahlian')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="col-md-6">

@@ -12,8 +12,10 @@ class Alumni extends Authenticatable
     use HasFactory;
 
     protected $fillable = [
-        'nis',
+        // 'nis',
         'nama_lengkap',
+        'universitas',
+        'nama_angkatan',
         'tanggal_lahir',
         'jenis_kelamin',
         'alamat',
@@ -36,7 +38,8 @@ class Alumni extends Authenticatable
     ];
 
     public function numberDataAlumni() {
-        return $this->hasOne(NumberDataAlumni::class, 'nis_alumni', 'nis');
+        // return $this->hasOne(NumberDataAlumni::class, 'nis_alumni', 'nis');
+        return $this->hasOne(NumberDataAlumni::class);
     }
 
 }

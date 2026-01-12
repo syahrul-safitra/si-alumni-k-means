@@ -12,8 +12,8 @@ class NumberDataAlumni extends Model
 
     protected $fillable = 
     [
-        'nis_alumni',
-        
+        // 'nis_alumni',
+        'alumni_id',
         'value_jenis_pekerjaan',
         'value_jenjang_pendidikan',
         'value_tahun_lulus',

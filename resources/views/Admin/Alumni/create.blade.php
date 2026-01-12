@@ -86,6 +86,7 @@
                                 <option value="pns">PNS</option>
                                 <option value="wiraswasta">Wiraswasta</option>
                                 <option value="mahasiswa">Mahasiswa</option>
+                                <option value="irt">IRT</option>
                                 <option value="lain_lain">Lain-lain</option>
                             </select>
 

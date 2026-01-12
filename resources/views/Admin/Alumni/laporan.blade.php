@@ -1,4 +1,3 @@
-f
 <!DOCTYPE html>
 <html>
 
@@ -99,8 +98,8 @@ f
         <thead>
             <tr>
                 <th>No</th>
-                <th>NIS</th>
                 <th>Nama Lengkap</th>
+                <th>Nama Angkatan</th>
                 <th>Tahun Lulus</th>
                 <th>Cluster ID</th>
                 <th>Cluster Label</th>
@@ -110,8 +109,8 @@ f
             @foreach ($alumniData as $index => $alumni)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $alumni->nis }}</td>
                     <td>{{ $alumni->nama_lengkap }}</td>
+                    <td>{{ $alumni->nama_angkatan }}</td>
                     <td>{{ $alumni->tahun_lulus }}</td>
                     <td>{{ $alumni->cluster_id + 1 }}</td>
                     <td>{{ $alumni->cluster_label }}</td>

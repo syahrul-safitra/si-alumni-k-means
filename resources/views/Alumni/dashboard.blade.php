@@ -36,7 +36,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Alumni Lokal + Wirausaha</div>
+                                Alumni Menlanjutkan Pendidikan</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $jumlahAlumniC1 }}</div>
                         </div>
                         <div class="col-auto">
@@ -53,7 +53,7 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Alumni Profesional
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Alumni Bekerja
                             </div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -76,7 +76,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Alumni Mahasisa/Belum Bekerja</div>
+                                Alumni IRT</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $jumlahAlumniC3 }}</div>
                         </div>
                         <div class="col-auto">
@@ -103,6 +103,46 @@
         </div>
     </div>
 
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    Data Infaq
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Tanggal</th>
+                                    <th>Jenis Infak</th>
+                                    <th>Jumlah</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($infaqs as $infaq)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $infaq->nama }}</td>
+                                        <td>{{ date('d-m-Y', strtotime($infaq->tanggal)) }}</td>
+                                        <td>{{ $infaq->jenis_infak }}</td>
+                                        <td>{{ $infaq->jumlah }}</td>
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <div class="row mt-4">
 

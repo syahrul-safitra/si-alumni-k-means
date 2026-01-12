@@ -10,13 +10,13 @@ class AlumniCluster extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nis_alumni',
+        'alumni_id',
         'cluster_id',
         'cluster_label'
     ];
 
     public function numberDataAlumni() {
-        return $this->belongsTo(Alumni::class, 'nis_alumni', 'nis');
+        return $this->belongsTo(Alumni::class);
     }
 
 }

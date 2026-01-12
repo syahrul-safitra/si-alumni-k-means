@@ -160,18 +160,19 @@
                             @csrf
 
                             <div class="row g-3">
-                                <!-- NIS -->
-                                <div class="col-md-4 mb-2">
-                                    <label for="nis" class="form-label">NIS Alumni</label>
-                                    <input type="text" name="nis" id="nis" class="form-control"
-                                        value="{{ @old('nis') }}" required>
-                                </div>
 
                                 <!-- Nama -->
                                 <div class="col-md-8 mb-2">
                                     <label for="nama_lengkap" class="form-label">Nama Lengkap</label>
                                     <input type="text" name="nama_lengkap" value="{{ @old('nama_lengkap') }}"
                                         id="nama_lengkap" class="form-control" required>
+                                </div>
+
+                                <!-- NIS -->
+                                <div class="col-md-4 mb-2">
+                                    <label for="nama_angkatan" class="form-label">Nama Angkatan</label>
+                                    <input type="text" name="nama_angkatan" id="nama_angkatan" class="form-control"
+                                        maxlength="250" value="{{ @old('nama_angkatan') }}" required>
                                 </div>
 
                                 <!-- Tanggal Lahir -->
@@ -218,7 +219,7 @@
                                 </div>
 
                                 <div class="col-lg-6 mb-2">
-                                    <label class="form-label">Gambar Berita</label>
+                                    <label class="form-label">Foto Alumni</label>
                                     <input type="file" name="gambar" id="gambar" class="form-control"
                                         accept="image/*" onchange="previewGambar()">
 
@@ -242,6 +243,7 @@
                                         <option value="pns" @selected(@old('jenis_pekerjaan') == 'pns')>PNS</option>
                                         <option value="wiraswasta" @selected(@old('jenis_pekerjaan') == 'wiraswasta')>Wiraswasta</option>
                                         <option value="mahasiswa" @selected(@old('jenis_pekerjaan') == 'mahasiswa')>Mahasiswa</option>
+                                        <option value="irt" @selected(@old('jenis_pekerjaan') == 'irt')>IRT</option>
                                         <option value="lain_lain" @selected(@old('jenis_pekerjaan') == 'lain_lain')>Lain-lain</option>
                                     </select>
                                 </div>
@@ -265,6 +267,13 @@
                                     <label for="tahun_lulus" class="form-label">Tahun Lulus</label>
                                     <input type="number" name="tahun_lulus" id="tahun_lulus" class="form-control"
                                         value="{{ @old('tahun_lulus') }}" min="2021" max="{{ date('Y') }}">
+                                </div>
+
+                                <!-- Univeristas -->
+                                <div class="col-md-12 mb-2">
+                                    <label for="univeristas" class="form-label">Universitas</label>
+                                    <input type="text" name="univeristas" id="univeristas" class="form-control"
+                                        value="{{ @old('univeristas') }}" min="2021" max="{{ date('Y') }}">
                                 </div>
 
                                 <!-- Domisili -->

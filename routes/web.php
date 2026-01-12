@@ -4,6 +4,7 @@ use App\Http\Controllers\AlumniController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\ClusteringController;
+use App\Http\Controllers\InfakController;
 use App\Models\Alumni;
 use App\Models\User;
 use App\Models\AlumniCluster;
@@ -58,6 +59,8 @@ Route::get('/', function () {
 
 Route::resource('alumni', AlumniController::class)->middleware('admin_pimpinan');
 Route::resource('berita', BeritaController::class);
+Route::resource('infaq', InfakController::class);
+
 Route::get('set-admin', function() {
     return view('Admin.set-admin', [
         'user' => Auth::guard('admin_pimpinan')->user()

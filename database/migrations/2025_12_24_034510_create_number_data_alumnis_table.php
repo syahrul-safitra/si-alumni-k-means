@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('number_data_alumnis', function (Blueprint $table) {
             $table->id();
 
-            $table->string('nis_alumni', 20)->unique();
+            // $table->string('nis_alumni', 20)->unique();
 
-            $table->foreign('nis_alumni')->references('nis')->on('alumnis')->cascadeOnDelete()->cascadeOnUpdate();
+            // $table->foreign('nis_alumni')->references('nis')->on('alumnis')->cascadeOnDelete()->cascadeOnUpdate();
 
+            // $table->foreignId('aulmni_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('alumni_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             
             $table->float('value_jenis_pekerjaan');
             $table->float('value_jenjang_pendidikan');

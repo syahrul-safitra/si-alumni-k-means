@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('alumni_clusters', function (Blueprint $table) {
             $table->id();
 
-            $table->string('nis_alumni', 20)->unique();
+            // $table->string('nis_alumni', 20)->unique();
 
-            $table->foreign('nis_alumni')->references('nis')->on('alumnis')->cascadeOnDelete()->cascadeOnUpdate();
+            // $table->foreign('nis_alumni')->references('nis')->on('alumnis')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('alumni_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->integer('cluster_id'); // 0,1,2
             $table->string('cluster_label'); // Nama cluster

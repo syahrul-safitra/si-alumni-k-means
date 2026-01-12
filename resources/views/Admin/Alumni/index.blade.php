@@ -36,8 +36,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>NIS</th>
                                 <th>Nama</th>
+                                <th>Nama Angkatan</th>
                                 <th>Tgl Lahir</th>
                                 <th>JK</th>
                                 <th>Alamat</th>
@@ -46,6 +46,7 @@
                                 <th>Tahun Lulus</th>
                                 <th>Domisili</th>
                                 <th>Jenjang Pendidikan</th>
+                                <th>Universitas</th>
                                 <th>Jenis Pekerjaan</th>
                                 <th>Jenis Keahlian</th>
                                 <th>Aksi</th>
@@ -56,8 +57,8 @@
                             @foreach ($alumnis as $alumni)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $alumni->nis }}</td>
                                     <td>{{ $alumni->nama_lengkap }}</td>
+                                    <td>{{ $alumni->nama_angkatan }}</td>
                                     <td>{{ date('d-m-Y', strtotime($alumni->tanggal_lahir)) }}</td>
                                     <td>{{ $alumni->jenis_kelamin }}</td>
                                     <td>{{ $alumni->alamat }}</td>
@@ -66,6 +67,7 @@
                                     <td>{{ $alumni->tahun_lulus }}</td>
                                     <td>{{ $alumni->domisili }}</td>
                                     <td>{{ $alumni->jenjang_pendidikan }}</td>
+                                    <td>{{ $alumni->universitas }}</td>
                                     <td>{{ $alumni->jenis_pekerjaan }}</td>
                                     <td>{{ $alumni->jenis_keahlian }}</td>
 
@@ -75,8 +77,9 @@
                                             {{-- MODAL UNTUK SHOW --}}
                                             <button type="button" class="btn btn-sm btn-info detail-button"
                                                 style="margin-right: 10px" data-toggle="modal"
-                                                data-target="#detailAlumniModal" data-nis="{{ $alumni->nis }}"
+                                                data-target="#detailAlumniModal" data-nis="{{ $alumni->id }}"
                                                 data-nama="{{ $alumni->nama_lengkap }}"
+                                                data-angkatan="{{ $alumni->nama_angkatan }}"
                                                 data-tgllahir="{{ date('d-m-Y', strtotime($alumni->tanggal_lahir)) }}"
                                                 data-jk="{{ $alumni->jenis_kelamin == 'laki_laki' ? 'Laki-laki' : 'Perempuan' }}"
                                                 data-email="{{ $alumni->email }}" data-telp="{{ $alumni->no_telepon }}"
@@ -112,8 +115,8 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>NIS</th>
                                 <th>Nama</th>
+                                <th>Nama Angkatan</th>
                                 <th>Tgl Lahir</th>
                                 <th>JK</th>
                                 <th>Alamat</th>
@@ -122,6 +125,7 @@
                                 <th>Tahun Lulus</th>
                                 <th>Domisili</th>
                                 <th>Jenjang Pendidikan</th>
+                                <th>Universitas</th>
                                 <th>Jenis Pekerjaan</th>
                                 <th>Jenis Keahlian</th>
                                 <th>Aksi</th>
@@ -132,8 +136,8 @@
                             @foreach ($alumnis as $alumni)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $alumni->nis }}</td>
                                     <td>{{ $alumni->nama_lengkap }}</td>
+                                    <td>{{ $alumni->nama_angkatan }}</td>
                                     <td>{{ date('d-m-Y', strtotime($alumni->tanggal_lahir)) }}</td>
                                     <td>{{ $alumni->jenis_kelamin }}</td>
                                     <td>{{ $alumni->alamat }}</td>
@@ -142,6 +146,7 @@
                                     <td>{{ $alumni->tahun_lulus }}</td>
                                     <td>{{ $alumni->domisili }}</td>
                                     <td>{{ $alumni->jenjang_pendidikan }}</td>
+                                    <td>{{ $alumni->universitas }}</td>
                                     <td>{{ $alumni->jenis_pekerjaan }}</td>
                                     <td>{{ $alumni->jenis_keahlian }}</td>
 
@@ -151,8 +156,10 @@
                                             {{-- MODAL UNTUK SHOW --}}
                                             <button type="button" class="btn btn-sm btn-info detail-button"
                                                 style="margin-right: 10px" data-toggle="modal"
-                                                data-target="#detailAlumniModal" data-nis="{{ $alumni->nis }}"
+                                                data-target="#detailAlumniModal" data-nis="{{ $alumni->id }}"
                                                 data-nama="{{ $alumni->nama_lengkap }}"
+                                                data-angkatan="{{ $alumni->nama_angkatan }}"
+                                                data-universitas="{{ $alumni->universitas }}"
                                                 data-tgllahir="{{ date('d-m-Y', strtotime($alumni->tanggal_lahir)) }}"
                                                 data-jk="{{ $alumni->jenis_kelamin == 'laki_laki' ? 'Laki-laki' : 'Perempuan' }}"
                                                 data-email="{{ $alumni->email }}" data-telp="{{ $alumni->no_telepon }}"
@@ -204,12 +211,12 @@
                         <div class="col-md-8">
                             <table class="table table-sm table-borderless">
                                 <tr>
-                                    <th width="150">NIS</th>
-                                    <td>: <span id="modal-nis"></span></td>
-                                </tr>
-                                <tr>
                                     <th>Nama Lengkap</th>
                                     <td>: <span id="modal-nama"></span></td>
+                                </tr>
+                                <tr>
+                                    <th>Nama Angkatan</th>
+                                    <td>: <span id="modal-angkatan"></span></td>
                                 </tr>
                                 <tr>
                                     <th>Tanggal Lahir</th>
@@ -244,6 +251,8 @@
                             <h6 class="font-weight-bold text-success">Pekerjaan</h6>
                             <p class="mb-1"><strong>Jenjang Pendidikan:</strong> <span id="modal-pendidikan"></span>
                             </p>
+                            <p class="mb-1"><strong>Universitas:</strong> <span id="modal-universitas"></span>
+                            </p>
                             <p class="mb-1"><strong>Status:</strong> <span id="modal-pekerjaan"></span></p>
                             <p class="mb-1"><strong>Jabatan:</strong> <span id="modal-n_pekerjaan"></span></p>
                             <p class="mb-1"><strong>Perusahaan:</strong> <span id="modal-t_kerja"></span></p>
@@ -272,7 +281,7 @@
                 button.addEventListener('click', function() {
                     // Mapping ID elemen modal
                     const fields = [
-                        'nis', 'nama', 'tgllahir', 'jk', 'email', 'telp',
+                        'angkatan', 'universitas', 'nama', 'tgllahir', 'jk', 'email', 'telp',
                         'alamat', 'pekerjaan', 'n_pekerjaan', 't_kerja',
                         'pendidikan', 'lulus', 'domisili', 'keahlian'
                     ];
@@ -281,8 +290,10 @@
                     fields.forEach(field => {
                         const dataValue = this.getAttribute('data-' + field);
                         const element = document.getElementById('modal-' + field);
+                        console.log(dataValue);
                         if (element) element.textContent = dataValue || '-';
                     });
+
 
                     // Khusus untuk elemen yang bukan textContent
                     document.getElementById('modal-nama-title').textContent = this.getAttribute(

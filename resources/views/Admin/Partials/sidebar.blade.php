@@ -29,6 +29,13 @@
                             <i class="fas fa-fw fa-book"></i>
                             <span>Berita</span></a>
                     </li>
+
+                    <!-- Nav Item - Tables -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('infaq') }}">
+                            <i class="fas fa-fw fa-money-bill-alt"></i>
+                            <span>Infaq</span></a>
+                    </li>
                 @endif
 
                 <!-- Nav Item - Tables -->
@@ -37,6 +44,7 @@
                         <i class="fas fa-fw fa-user"></i>
                         <span>Alumni</span></a>
                 </li>
+
 
                 <!-- Nav Item - Charts -->
                 <li class="nav-item">

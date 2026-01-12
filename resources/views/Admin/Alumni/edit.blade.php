@@ -32,11 +32,6 @@
 
                         <div class="row g-3">
 
-                            <!-- NIS -->
-                            <div class="col-md-4 mb-2">
-                                <label class="form-label">NIS Alumni</label>
-                                <input type="text" class="form-control" value="{{ $alumni->nis }}" name="nis">
-                            </div>
 
                             <!-- Nama -->
                             <div class="col-md-8 mb-2">
@@ -47,6 +42,13 @@
                                 @error('nama_lengkap')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+
+                            <!-- Nama Angkatan -->
+                            <div class="col-md-4 mb-2">
+                                <label class="form-label">Nama Angkatan</label>
+                                <input type="text" class="form-control"
+                                    value="{{ @old('nama_angkatan', $alumni->nama_angkatan) }}" name="nama_angkatan">
                             </div>
 
                             <!-- Tanggal Lahir -->

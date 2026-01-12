@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alumni;
 use App\Models\Berita;
+use App\Models\Infak;
 use App\Models\NumberDataAlumni;
 use App\Models\AlumniCluster;
 
@@ -43,7 +44,7 @@ class AlumniController extends Controller
             'Kalimantan Barat', 'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur', 'Kalimantan Utara',
             'Sulawesi Utara', 'Sulawesi Gorontalo', 'Sulawesi Tengah', 'Sulawesi Barat', 'Sulawesi Selatan', 'Sulawesi Tenggara',
             'Maluku', 'Maluku Utara',
-            'Papua Barat', 'Papua', 'Papua Tengah', 'Papua Pegunungan', 'Papua Selatan', 'Papua Barat Daya',
+            'Papua Barat', 'Papua', 'Papua Tengah', 'Papua Pegunungan', 'Papua Selatan', 'Papua Barat Daya', 'Luar Negeri'
         ];
 
         return view('Admin.Alumni.create', [
@@ -60,8 +61,9 @@ class AlumniController extends Controller
         
 
         $validated = $request->validate([
-            'nis' => 'required|string|max:20|unique:alumnis,nis',
-            'nama_lengkap' => 'required|string|max:100',
+            // 'nis' => 'required|string|max:20|unique:alumnis,nis',
+            'nama_lengkap' => 'required|string|max:200',
+            'nama_angkatan' => 'required|string|max:200',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:laki_laki,perempuan',
             'alamat' => 'required|max:240',
@@ -71,8 +73,9 @@ class AlumniController extends Controller
             'nama_tempat_bekerja' => 'sometimes|max:200',
             'password' => 'required|max:15',
             'gambar' => 'required|max:2100',
+            'univeristas' => 'required|string|max:200',
 
-            'jenis_pekerjaan' => 'required|in:pns,wiraswasta,mahasiswa,lain_lain',
+            'jenis_pekerjaan' => 'required|in:pns,wiraswasta,mahasiswa,irt,lain_lain',
             'jenjang_pendidikan' => 'required|in:SMA,D3,S1,S2,S3',
             'tahun_lulus' => 'required|integer|min:2021|max:' . date('Y'),
             'domisili' => 'required|string',
@@ -106,7 +109,7 @@ class AlumniController extends Controller
              * 3. KONVERSI KE NUMERIC
              * ======================= */
             $numericData = [
-                'nis_alumni' => $alumni->nis,
+                'alumni_id' => $alumni->id,
                 'value_jenis_pekerjaan' => $this->mapJenisPekerjaan($validated['jenis_pekerjaan']),
                 'value_jenjang_pendidikan' => $this->mapJenjangPendidikan($validated['jenjang_pendidikan']),
                 'value_tahun_lulus' => $this->normalizeTahunLulus($validated['tahun_lulus']),
@@ -156,7 +159,7 @@ class AlumniController extends Controller
             'Kalimantan Barat', 'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur', 'Kalimantan Utara',
             'Sulawesi Utara', 'Sulawesi Gorontalo', 'Sulawesi Tengah', 'Sulawesi Barat', 'Sulawesi Selatan', 'Sulawesi Tenggara',
             'Maluku', 'Maluku Utara',
-            'Papua Barat', 'Papua', 'Papua Tengah', 'Papua Pegunungan', 'Papua Selatan', 'Papua Barat Daya',
+            'Papua Barat', 'Papua', 'Papua Tengah', 'Papua Pegunungan', 'Papua Selatan', 'Papua Barat Daya', "Luar Negeri"
         ];
 
         return view('Alumni.edit', [
@@ -257,8 +260,9 @@ class AlumniController extends Controller
 
         // 2. Validasi (Gunakan ignore pada unique agar data lama tetap valid)
         $validated = $request->validate([
-            'nis' => 'required|string|max:20|unique:alumnis,nis,' . $alumnus->id,
+            // 'nis' => 'required|string|max:20|unique:alumnis,nis,' . $alumnus->id,
             'nama_lengkap' => 'required|string|max:100',
+            'nama_angkatan' => 'required|string|max:200',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:laki_laki,perempuan',
             'alamat' => 'required|max:240',
@@ -273,7 +277,8 @@ class AlumniController extends Controller
             'password' => 'nullable|max:15', // Jadikan nullable saat update
             'gambar' => 'nullable|image|max:2100', // Nullable agar tidak wajib upload ulang
 
-            'jenis_pekerjaan' => 'required|in:pns,wiraswasta,mahasiswa,lain_lain',
+            'universitas' => 'required|string|max:200',
+            'jenis_pekerjaan' => 'required|in:pns,wiraswasta,mahasiswa,irt,lain_lain',
             'jenjang_pendidikan' => 'required|in:SMA,D3,S1,S2,S3',
             'tahun_lulus' => 'required|integer|min:2021|max:' . date('Y'),
             'domisili' => 'required|string',
@@ -316,7 +321,7 @@ class AlumniController extends Controller
             * 6. UPDATE DATA NUMERIC
             * ======================= */
             $numericData = [
-                'nis_alumni' => $alumnus->nis, // Pastikan NIS terupdate jika berubah
+                'alumni_id' => $alumnus->id, // Pastikan NIS terupdate jika berubah
                 'value_jenis_pekerjaan' => $this->mapJenisPekerjaan($validated['jenis_pekerjaan']),
                 'value_jenjang_pendidikan' => $this->mapJenjangPendidikan($validated['jenjang_pendidikan']),
                 'value_tahun_lulus' => $this->normalizeTahunLulus($validated['tahun_lulus']),
@@ -325,7 +330,7 @@ class AlumniController extends Controller
             ];
 
             // Gunakan update pada model NumberDataAlumni berdasarkan NIS lama
-            NumberDataAlumni::where('nis_alumni', $alumnus->getOriginal('nis'))->update($numericData);
+            NumberDataAlumni::where('alumni_id', $alumnus->getOriginal('id'))->update($numericData);
 
             DB::commit();
 
@@ -418,7 +423,8 @@ class AlumniController extends Controller
                 'mahasiswa' => 1,
                 'pns' => 2,
                 'wiraswasta' => 3,
-                'lain_lain' => 4,
+                'irt' => 4,
+                'lain_lain' => 5,
             };
         }
 
@@ -474,6 +480,8 @@ class AlumniController extends Controller
                 ->pluck('total', 'tahun_lulus')
                 ->toArray();
 
+            $infaqs = Infak::orderByDesc('tanggal')->get();
+
             // Pastikan 5 tahun tetap muncul walau datanya 0
             $labels = [];
             $values = [];
@@ -491,7 +499,8 @@ class AlumniController extends Controller
                 'alumni' => Auth::guard('alumni')->user(),
                 'news' => Berita::orderBy('tanggal', 'asc')->paginate(3),
                 'labels' => $labels, 
-                'values' => $values
+                'values' => $values,
+                'infaqs' => $infaqs
             ]);
         }
 
